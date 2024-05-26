@@ -234,11 +234,6 @@ func (m *manager) CommitConfiguration(_, to config.Configuration) (handled bool)
 	m.mut.Lock()
 	defer m.mut.Unlock()
 	toIdentities := make(map[string]struct{})
-	if to.Options.GlobalAnnEnabled {
-		for _, srv := range to.Options.GlobalDiscoveryServers() {
-			toIdentities[globalDiscoveryIdentity(srv)] = struct{}{}
-		}
-	}
 
 	if to.Options.LocalAnnEnabled {
 		toIdentities[ipv4Identity(to.Options.LocalAnnPort)] = struct{}{}
@@ -249,27 +244,6 @@ func (m *manager) CommitConfiguration(_, to config.Configuration) (handled bool)
 	for identity := range m.finders {
 		if _, ok := toIdentities[identity]; !ok {
 			m.removeLocked(identity)
-		}
-	}
-
-	// Add things we don't have.
-	if to.Options.GlobalAnnEnabled {
-		for _, srv := range to.Options.GlobalDiscoveryServers() {
-			identity := globalDiscoveryIdentity(srv)
-			// Skip, if it's already running.
-			if _, ok := m.finders[identity]; ok {
-				continue
-			}
-			gd, err := NewGlobal(srv, m.cert, m.addressLister, m.evLogger, m.registry)
-			if err != nil {
-				l.Warnln("Global discovery:", err)
-				continue
-			}
-
-			// Each global discovery server gets its results cached for five
-			// minutes, and is not asked again for a minute when it's returned
-			// unsuccessfully.
-			m.addLocked(identity, gd, 5*time.Minute, time.Minute)
 		}
 	}
 

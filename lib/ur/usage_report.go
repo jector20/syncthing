@@ -16,7 +16,6 @@ import (
 	"net/http"
 	"runtime"
 	"sort"
-	"strings"
 	"sync"
 	"time"
 
@@ -183,26 +182,11 @@ func (s *Service) reportData(ctx context.Context, urVersion int, preview bool) (
 		}
 	}
 
-	report.Announce.GlobalEnabled = opts.GlobalAnnEnabled
+	// disable global announence
+	report.Announce.GlobalEnabled = false
 	report.Announce.LocalEnabled = opts.LocalAnnEnabled
-	for _, addr := range opts.RawGlobalAnnServers {
-		if addr == "default" || addr == "default-v4" || addr == "default-v6" {
-			report.Announce.DefaultServersDNS++
-		} else {
-			report.Announce.OtherServers++
-		}
-	}
 
-	report.Relays.Enabled = opts.RelaysEnabled
-	for _, addr := range s.cfg.Options().ListenAddresses() {
-		switch {
-		case addr == "dynamic+https://relays.syncthing.net/endpoint":
-			report.Relays.DefaultServers++
-		case strings.HasPrefix(addr, "relay://") || strings.HasPrefix(addr, "dynamic+http"):
-			report.Relays.OtherServers++
-
-		}
-	}
+	report.Relays.Enabled = false
 
 	report.UsesRateLimit = opts.MaxRecvKbps > 0 || opts.MaxSendKbps > 0
 	report.UpgradeAllowedManual = !(upgrade.DisabledByCompilation || s.noUpgrade)

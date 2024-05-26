@@ -45,22 +45,19 @@ var (
 	// "consumer" of the configuration as we don't want these saved to the
 	// config.
 	DefaultListenAddresses = []string{
-		netutil.AddressURL("tcp", net.JoinHostPort("0.0.0.0", strconv.Itoa(DefaultTCPPort))),
-		"dynamic+https://relays.syncthing.net/endpoint",
-		netutil.AddressURL("quic", net.JoinHostPort("0.0.0.0", strconv.Itoa(DefaultQUICPort))),
+		netutil.AddressURL("tcp", net.JoinHostPort("127.0.0.1", strconv.Itoa(DefaultTCPPort))),
+		netutil.AddressURL("quic", net.JoinHostPort("127.0.0.1", strconv.Itoa(DefaultQUICPort))),
 	}
 	DefaultGUIPort = 8384
 	// DefaultDiscoveryServersV4 should be substituted when the configuration
 	// contains <globalAnnounceServer>default-v4</globalAnnounceServer>.
 	DefaultDiscoveryServersV4 = []string{
-		"https://discovery.syncthing.net/v2/?noannounce&id=LYXKCHX-VI3NYZR-ALCJBHF-WMZYSPK-QG6QJA3-MPFYMSO-U56GTUK-NA2MIAW",
-		"https://discovery-v4.syncthing.net/v2/?nolookup&id=LYXKCHX-VI3NYZR-ALCJBHF-WMZYSPK-QG6QJA3-MPFYMSO-U56GTUK-NA2MIAW",
+		"https://localhost",
 	}
 	// DefaultDiscoveryServersV6 should be substituted when the configuration
 	// contains <globalAnnounceServer>default-v6</globalAnnounceServer>.
 	DefaultDiscoveryServersV6 = []string{
-		"https://discovery.syncthing.net/v2/?noannounce&id=LYXKCHX-VI3NYZR-ALCJBHF-WMZYSPK-QG6QJA3-MPFYMSO-U56GTUK-NA2MIAW",
-		"https://discovery-v6.syncthing.net/v2/?nolookup&id=LYXKCHX-VI3NYZR-ALCJBHF-WMZYSPK-QG6QJA3-MPFYMSO-U56GTUK-NA2MIAW",
+		"https://[::1]",
 	}
 	// DefaultDiscoveryServers should be substituted when the configuration
 	// contains <globalAnnounceServer>default</globalAnnounceServer>.
@@ -72,23 +69,23 @@ var (
 
 	// DefaultPrimaryStunServers are servers provided by us (to avoid causing the public servers burden)
 	DefaultPrimaryStunServers = []string{
-		"stun.syncthing.net:3478",
+		//"stun.syncthing.net:3478",
 	}
 	DefaultSecondaryStunServers = []string{
-		"stun.callwithus.com:3478",
-		"stun.counterpath.com:3478",
-		"stun.counterpath.net:3478",
-		"stun.ekiga.net:3478",
-		"stun.ideasip.com:3478",
-		"stun.internetcalls.com:3478",
-		"stun.schlund.de:3478",
-		"stun.sipgate.net:10000",
-		"stun.sipgate.net:3478",
-		"stun.voip.aebc.com:3478",
-		"stun.voiparound.com:3478",
-		"stun.voipbuster.com:3478",
-		"stun.voipstunt.com:3478",
-		"stun.xten.com:3478",
+		//"stun.callwithus.com:3478",
+		//"stun.counterpath.com:3478",
+		//"stun.counterpath.net:3478",
+		//"stun.ekiga.net:3478",
+		//"stun.ideasip.com:3478",
+		//"stun.internetcalls.com:3478",
+		//"stun.schlund.de:3478",
+		//"stun.sipgate.net:10000",
+		//"stun.sipgate.net:3478",
+		//"stun.voip.aebc.com:3478",
+		//"stun.voiparound.com:3478",
+		//"stun.voipbuster.com:3478",
+		//"stun.voipstunt.com:3478",
+		//"stun.xten.com:3478",
 	}
 )
 
@@ -122,7 +119,7 @@ func (cfg *Configuration) ProbeFreePorts() error {
 	}
 	cfg.GUI.RawAddress = fmt.Sprintf("127.0.0.1:%d", port)
 
-	port, err = getFreePort("0.0.0.0", DefaultTCPPort)
+	port, err = getFreePort("127.0.0.1", DefaultTCPPort)
 	if err != nil {
 		return fmt.Errorf("get free port (BEP): %w", err)
 	}
@@ -130,9 +127,8 @@ func (cfg *Configuration) ProbeFreePorts() error {
 		cfg.Options.RawListenAddresses = []string{"default"}
 	} else {
 		cfg.Options.RawListenAddresses = []string{
-			netutil.AddressURL("tcp", net.JoinHostPort("0.0.0.0", strconv.Itoa(port))),
-			"dynamic+https://relays.syncthing.net/endpoint",
-			netutil.AddressURL("quic", net.JoinHostPort("0.0.0.0", strconv.Itoa(port))),
+			netutil.AddressURL("tcp", net.JoinHostPort("127.0.0.1", strconv.Itoa(port))),
+			netutil.AddressURL("quic", net.JoinHostPort("127.0.0.1, strconv.Itoa(port))),
 		}
 	}
 
