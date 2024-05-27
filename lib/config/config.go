@@ -128,7 +128,7 @@ func (cfg *Configuration) ProbeFreePorts() error {
 	} else {
 		cfg.Options.RawListenAddresses = []string{
 			netutil.AddressURL("tcp", net.JoinHostPort("127.0.0.1", strconv.Itoa(port))),
-			netutil.AddressURL("quic", net.JoinHostPort("127.0.0.1, strconv.Itoa(port))),
+			netutil.AddressURL("quic", net.JoinHostPort("127.0.0.1", strconv.Itoa(port))),
 		}
 	}
 

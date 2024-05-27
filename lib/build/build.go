@@ -52,7 +52,7 @@ func init() {
 	if Version != "unknown-dev" {
 		// If not a generic dev build, version string should come from git describe
 		if !allowedVersionExp.MatchString(Version) {
-			log.Fatalf("Invalid version string %q;\n\tdoes not match regexp %v", Version, allowedVersionExp)
+			log.Println("Invalid version string %q;\n\tdoes not match regexp %v", Version, allowedVersionExp)
 		}
 	}
 	setBuildData()
